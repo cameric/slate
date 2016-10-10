@@ -120,8 +120,6 @@
 
 <p>Welcome to the 8Weike API!</p>
 
-<p>Languages available in Shell, JavaScript and Swift! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
-
 <h1 id="credential">Credential</h1>
 
 <h2 id="login-using-cellphone-number">Login using cellphone number</h2>
@@ -180,6 +178,13 @@
 </tr>
 </tbody></table>
 
+<h3 id="error-codes">Error codes</h3>
+
+<ul>
+<li>401 if user provides invalid credential</li>
+<li>400 for all other errors</li>
+</ul>
+
 <h2 id="login-using-wechat-credential">Login using WeChat credential</h2>
 <pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/api/login/wechat</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
@@ -202,6 +207,482 @@ Not implemented yet
 
 <aside class="warning">
 Not implemented yet
+</aside>
+
+<h2 id="check-login-status">Check login status</h2>
+<pre class="highlight http"><code><span class="nf">GET</span> <span class="nn">/api/login</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
+</code></pre>
+
+<blockquote>
+<p>JSON response if logged in:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">  
+  </span><span class="nt">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">    
+  </span><span class="nt">"credential"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>JSON response if not logged in:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">  
+  </span><span class="nt">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">    
+  </span><span class="nt">"credential"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p>Check if the user has logged in and retrieve credential ID if so</p>
+
+<h2 id="signup-web-only">Signup (Web only)</h2>
+<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/api/signup/phone/web</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
+</code></pre>
+
+<blockquote>
+<p>JSON response if error occurred:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"User already exists!"</span><span class="w">
+  </span><span class="p">}</span><span class="w">  
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p>Web-only signup endpoint with cellphone. It will send a TFA code to phone.</p>
+
+<aside class="warning">
+Note: This endpoint involves string-based Captcha check so it&rsquo;s not suitable for mobile environment.
+</aside>
+
+<h3 id="query-parameters">Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>phone</td>
+<td>string</td>
+<td>null</td>
+<td>The cellphone number for the new user</td>
+</tr>
+<tr>
+<td>password</td>
+<td>string</td>
+<td>null</td>
+<td>User password</td>
+</tr>
+<tr>
+<td>captcha</td>
+<td>string</td>
+<td>null</td>
+<td>The user-input of the captcha image</td>
+</tr>
+<tr>
+<td>hash</td>
+<td>string</td>
+<td>null</td>
+<td>The original bcrypted hash that corresponds to the actual captcha value</td>
+</tr>
+</tbody></table>
+
+<h3 id="error-codes">Error codes</h3>
+
+<ul>
+<li>400 if one of the following scenarios occurs:
+
+<ul>
+<li>Incorrect captcha</li>
+<li>Credential already exists in database</li>
+</ul></li>
+<li>500 if one of the following scenarios occurs:
+
+<ul>
+<li>Error occurred in the process of sending TFA code</li>
+<li>Error occurred during session saving</li>
+</ul></li>
+</ul>
+
+<h2 id="signup-mobile-only">Signup (Mobile only)</h2>
+<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/api/signup/phone/mobile</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
+</code></pre>
+
+<blockquote>
+<p>JSON response if error occurred:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"User already exists!"</span><span class="w">
+  </span><span class="p">}</span><span class="w">  
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p>Mobile-only signup endpoint with cellphone. It will send a TFA code to phone.</p>
+
+<aside class="warning">
+Note: This endpoint does not go through Captcha check so it&rsquo;s not suitable for web.
+</aside>
+
+<h3 id="query-parameters">Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>phone</td>
+<td>string</td>
+<td>null</td>
+<td>The cellphone number for the new user</td>
+</tr>
+<tr>
+<td>password</td>
+<td>string</td>
+<td>null</td>
+<td>User password</td>
+</tr>
+</tbody></table>
+
+<h3 id="error-codes">Error codes</h3>
+
+<ul>
+<li>400 if Credential already exists in database<br></li>
+<li>500 if one of the following scenarios occurs:
+
+<ul>
+<li>Error occurred in the process of sending TFA code</li>
+<li>Error occurred during session saving</li>
+</ul></li>
+</ul>
+
+<h2 id="signup-verify">Signup verify</h2>
+<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/api/signup/verify</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
+</code></pre>
+
+<blockquote>
+<p>JSON response if error occurred:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Code is incorrect!"</span><span class="w">
+  </span><span class="p">},</span><span class="w">  
+  </span><span class="nt">"credential"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>JSON response if no error:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"credential"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p>Verify the TFA code and save user credential into database       </p>
+
+<h3 id="query-parameters">Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>code</td>
+<td>string</td>
+<td>null</td>
+<td>The user-input TFA code</td>
+</tr>
+</tbody></table>
+
+<h3 id="error-codes">Error codes</h3>
+
+<ul>
+<li>400 if one of the following scenarios occurs:
+
+<ul>
+<li>User is not pending signup</li>
+<li>TFA code is incorrect<br></li>
+</ul></li>
+<li>500 if other error occurred</li>
+</ul>
+
+<h1 id="profile">Profile</h1>
+
+<h2 id="create-profile">Create profile</h2>
+<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/api/profile</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
+</code></pre>
+
+<blockquote>
+<p>JSON response if error occurred:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Error occurred!"</span><span class="w">
+  </span><span class="p">},</span><span class="w">  
+  </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>JSON response if no error:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"profileId"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p>Create a new profile and associate the login credential with it</p>
+
+<aside class="success">
+This endpoint requires that the user has logged in
+</aside>
+
+<h3 id="query-parameters">Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>nickname</td>
+<td>string</td>
+<td>null</td>
+<td>the nickname for the profile</td>
+</tr>
+</tbody></table>
+
+<h3 id="error-codes">Error codes</h3>
+
+<p>400 if error occurred in the middle of creating the profile</p>
+
+<h2 id="retrieve-minimal-profile">Retrieve minimal profile</h2>
+<pre class="highlight http"><code><span class="nf">GET</span> <span class="nn">/api/profile/info</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
+</code></pre>
+
+<blockquote>
+<p>JSON response if error occurred:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Error occurred!"</span><span class="w">
+  </span><span class="p">},</span><span class="w">  
+  </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>JSON response if no error:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"nickname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cam"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CEO of Cameric"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FGHSDF8R82DFSFHDS"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p>Retrieve the minimal representation of a profile</p>
+
+<aside class="success">
+This endpoint requires that the user has logged in
+</aside>
+
+<aside class="warning">
+this endpoint is more suitable for web, since it&rsquo;s better to get the whole user in one call on mobile.
+</aside>
+
+<h3 id="error-codes">Error codes</h3>
+
+<p>400 if error occurred in the middle of retrieving the profile</p>
+
+<h2 id="retrieve-full-profile">Retrieve full profile</h2>
+<pre class="highlight http"><code><span class="nf">GET</span> <span class="nn">/api/profile/full</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
+</code></pre>
+
+<blockquote>
+<p>JSON response if error occurred:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Error occurred!"</span><span class="w">
+  </span><span class="p">},</span><span class="w">  
+  </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>JSON response if no error:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"nickname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cam"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CEO of Cameric"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FGHSDF8R82DFSFHDS"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"[other fields]"</span><span class="p">:</span><span class="w"> </span><span class="s2">"..."</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p>Retrieve the full representation of a profile</p>
+
+<aside class="success">
+This endpoint requires that the user has logged in
+</aside>
+
+<aside class="warning">
+The response is NOT complete! Will fill in more information as more features are built
+</aside>
+
+<h3 id="error-codes">Error codes</h3>
+
+<p>400 if error occurred in the middle of retrieving the profile</p>
+
+<h1 id="locale">Locale</h1>
+
+<h2 id="get-locale-code">Get locale code</h2>
+<pre class="highlight http"><code><span class="nf">GET</span> <span class="nn">/api/locale</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
+</code></pre>
+
+<blockquote>
+<p>No response for this endpoint, only status code</p>
+</blockquote>
+
+<p>Get the current locale code if stored in the session. Otherwise the default locale code (<code class="prettyprint">zh-CN</code>) is returned.</p>
+
+<h2 id="set-locale-code">Set locale code</h2>
+<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/api/locale</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
+</code></pre>
+
+<blockquote>
+<p>No response for this endpoint, only status code</p>
+</blockquote>
+
+<p>Save the locale into session</p>
+
+<h3 id="query-parameters">Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>locale</td>
+<td>string</td>
+<td>null</td>
+<td>the new locale code</td>
+</tr>
+</tbody></table>
+
+<h1 id="utility">Utility</h1>
+
+<h2 id="get-captcha-image-web-only">Get Captcha image (Web only)</h2>
+<pre class="highlight http"><code><span class="nf">GET</span> <span class="nn">/api/captcha</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
+</code></pre>
+
+<blockquote>
+<p>JSON response if error occurred:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="w">    
+  </span><span class="p">},</span><span class="w">  
+  </span><span class="nt">"captcha"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>JSON response if no error:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"captcha"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"hash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RUWREWHNBFSD9784324AER82IUQY23FAS4323RASFAEWD"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"picture"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">14</span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p>Get a captcha image data and hash</p>
+
+<aside class="warning">
+This endpoint is not suitable for mobile since string-based captcha is not mobile-friendly
+</aside>
+
+<h3 id="error-codes">Error codes</h3>
+
+<p>400 if error occurred in the middle of retrieving captcha data</p>
+
+<h2 id="get-global-info">Get global info</h2>
+<pre class="highlight http"><code><span class="nf">GET</span> <span class="nn">/api/global_info</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
+</code></pre>
+
+<blockquote>
+<p>JSON response:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"global_info"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"company"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cameric"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"v1"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p>Get server-side information about the company and product</p>
+
+<aside class="success">
+Note: this endpoint can be used to test the status of API server
 </aside>
 
           <h1 id="errors">Errors</h1>
