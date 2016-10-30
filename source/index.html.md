@@ -21,15 +21,15 @@ Welcome to the 8Weike API!
 
 In production environment, all API request should be sent to:
 
-```
+`
 https://oav0gkqdmk.execute-api.us-east-1.amazonaws.com/prod
-```
+`
 
 In dev/test, API requests should be sent to:
 
-```
+`
 https://oav0gkqdmk.execute-api.us-east-1.amazonaws.com/test
-```
+`
 
 In the future, once we acquire an SSL certificate, we will setup a 
 custom domain name so that we could use a more symbolic api server name.
