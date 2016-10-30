@@ -4,7 +4,7 @@ title: 8Weike API Doc
 language_tabs:
   - http  
 
-toc_footers:  
+toc_footers:
   - <a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a>
 
 includes:
@@ -16,6 +16,27 @@ search: true
 # Introduction
 
 Welcome to the 8Weike API!
+
+**Important Note:**
+
+In production environment, all API request should be sent to:
+
+```
+https://oav0gkqdmk.execute-api.us-east-1.amazonaws.com/prod
+```
+
+In dev/test, API requests should be sent to:
+
+```
+https://oav0gkqdmk.execute-api.us-east-1.amazonaws.com/test
+```
+
+In the future, once we acquire an SSL certificate, we will setup a 
+custom domain name so that we could use a more symbolic api server name.
+
+Note that the `host:` for each endpoint below signifies which server
+handles the request. However, **DO NOT send request directly to server!**
+Always use the API gateway above.
 
 # Credential
 
@@ -428,7 +449,7 @@ locale | string | null | the new locale code
 ## Get Captcha image (Web only)
 
 ```http
-GET /api/captcha HTTP/1.1
+POST /api/captcha HTTP/1.1
 Host: http://8weike.com    
 ```
 
