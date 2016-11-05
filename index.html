@@ -120,10 +120,31 @@
 
 <p>Welcome to the 8Weike API!</p>
 
+<p><strong>Important Note:</strong></p>
+
+<p>In production environment, all API request should be sent to:</p>
+
+<p><code class="prettyprint">
+https://oav0gkqdmk.execute-api.us-east-1.amazonaws.com/prod
+</code></p>
+
+<p>In dev/test, API requests should be sent to:</p>
+
+<p><code class="prettyprint">
+https://oav0gkqdmk.execute-api.us-east-1.amazonaws.com/test
+</code></p>
+
+<p>In the future, once we acquire an SSL certificate, we will setup a 
+custom domain name so that we could use a more symbolic api server name.</p>
+
+<p>Note that the <code class="prettyprint">host:</code> for each endpoint below signifies which server
+handles the request. However, <strong>DO NOT send request directly to server!</strong>
+Always use the API gateway above.</p>
+
 <h1 id="credential">Credential</h1>
 
 <h2 id="login-using-cellphone-number">Login using cellphone number</h2>
-<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/api/login/phone</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/login/phone</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
 <span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
 </code></pre>
@@ -186,7 +207,7 @@
 </ul>
 
 <h2 id="login-using-wechat-credential">Login using WeChat credential</h2>
-<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/api/login/wechat</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/login/wechat</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
 <span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com </span>
 </code></pre>
@@ -198,7 +219,7 @@ Not implemented yet
 </aside>
 
 <h2 id="login-using-weibo-credential">Login using Weibo credential</h2>
-<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/api/login/weibo</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/login/weibo</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
 <span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com </span>
 </code></pre>
@@ -210,7 +231,7 @@ Not implemented yet
 </aside>
 
 <h2 id="check-login-status">Check login status</h2>
-<pre class="highlight http"><code><span class="nf">GET</span> <span class="nn">/api/login</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<pre class="highlight http"><code><span class="nf">GET</span> <span class="nn">/login</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
 </code></pre>
 
@@ -237,7 +258,7 @@ Not implemented yet
 <p>Check if the user has logged in and retrieve credential ID if so</p>
 
 <h2 id="signup-web-only">Signup (Web only)</h2>
-<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/api/signup/phone/web</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/signup/phone/web</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
 <span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
 </code></pre>
@@ -313,7 +334,7 @@ Note: This endpoint involves string-based Captcha check so it&rsquo;s not suitab
 </ul>
 
 <h2 id="signup-mobile-only">Signup (Mobile only)</h2>
-<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/api/signup/phone/mobile</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/signup/phone/mobile</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
 <span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
 </code></pre>
@@ -372,7 +393,7 @@ Note: This endpoint does not go through Captcha check so it&rsquo;s not suitable
 </ul>
 
 <h2 id="signup-verify">Signup verify</h2>
-<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/api/signup/verify</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/signup/verify</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
 <span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
 </code></pre>
@@ -435,7 +456,7 @@ Note: This endpoint does not go through Captcha check so it&rsquo;s not suitable
 <h1 id="profile">Profile</h1>
 
 <h2 id="create-profile">Create profile</h2>
-<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/api/profile</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/profile</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
 <span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
 </code></pre>
@@ -491,52 +512,8 @@ This endpoint requires that the user has logged in
 
 <p>400 if error occurred in the middle of creating the profile</p>
 
-<h2 id="retrieve-minimal-profile">Retrieve minimal profile</h2>
-<pre class="highlight http"><code><span class="nf">GET</span> <span class="nn">/api/profile/info</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
-<span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
-</code></pre>
-
-<blockquote>
-<p>JSON response if error occurred:</p>
-</blockquote>
-<pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Error occurred!"</span><span class="w">
-  </span><span class="p">},</span><span class="w">  
-  </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-
-<blockquote>
-<p>JSON response if no error:</p>
-</blockquote>
-<pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"nickname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cam"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CEO of Cameric"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FGHSDF8R82DFSFHDS"</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-
-<p>Retrieve the minimal representation of a profile</p>
-
-<aside class="success">
-This endpoint requires that the user has logged in
-</aside>
-
-<aside class="warning">
-this endpoint is more suitable for web, since it&rsquo;s better to get the whole user in one call on mobile.
-</aside>
-
-<h3 id="error-codes">Error codes</h3>
-
-<p>400 if error occurred in the middle of retrieving the profile</p>
-
-<h2 id="retrieve-full-profile">Retrieve full profile</h2>
-<pre class="highlight http"><code><span class="nf">GET</span> <span class="nn">/api/profile/full</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<h2 id="retrieve-the-profile-of-the-currently-logged-in-user">Retrieve the profile of the currently logged in user</h2>
+<pre class="highlight http"><code><span class="nf">GET</span> <span class="nn">/profile/me</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
 </code></pre>
 
@@ -566,7 +543,7 @@ this endpoint is more suitable for web, since it&rsquo;s better to get the whole
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 
-<p>Retrieve the full representation of a profile</p>
+<p>Retrieve the full representation of the profile of currently logged in user</p>
 
 <aside class="success">
 This endpoint requires that the user has logged in
@@ -580,10 +557,176 @@ The response is NOT complete! Will fill in more information as more features are
 
 <p>400 if error occurred in the middle of retrieving the profile</p>
 
+<h2 id="retrieve-the-profile-of-a-user">Retrieve the profile of a user</h2>
+<pre class="highlight http"><code><span class="nf">GET</span> <span class="nn">/profile/:profile_id</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com</span>
+</code></pre>
+
+<blockquote>
+<p>JSON response if error occurred:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Error occurred!"</span><span class="w">
+  </span><span class="p">},</span><span class="w">  
+  </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>JSON response if no error:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"nickname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tony"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Engineer of Cameric"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"efhuwehu23ur32iu"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"[other fields]"</span><span class="p">:</span><span class="w"> </span><span class="s2">"..."</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p>Retrieve the full representation of a profile of user passed in as the url param</p>
+
+<aside class="warning">
+The response is NOT complete! Will fill in more information as more features are built
+</aside>
+
+<h3 id="error-codes">Error codes</h3>
+
+<p>400 if error occurred in the middle of retrieving the profile</p>
+
+<h1 id="post">Post</h1>
+
+<h2 id="create-a-new-post">Create a new post</h2>
+<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/post</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
+<span class="na">Content-Type</span><span class="p">:</span> <span class="s">multipart/form-data</span>
+</code></pre>
+
+<blockquote>
+<p>JSON response if error occurred:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Error occurred!"</span><span class="w">
+  </span><span class="p">},</span><span class="w">  
+  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>JSON response if no error:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p>Create a new post with corresponding media resources. Note that each media resource cannot exceed 5MB
+and only up to 10 media files could be uploaded for each post.</p>
+
+<p>The Id of the new post will be returned as response in order to fetch the post data later.</p>
+
+<aside class="success">
+This endpoint requires that the user has logged in
+</aside>
+
+<aside class="warning">
+The request MUST BE sent with the header `Content-Type: multipart/form-data`. Otherwise the post will not
+be created!
+</aside>
+
+<h3 id="query-parameters">Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>null</td>
+<td>the title of the post (required!)</td>
+</tr>
+<tr>
+<td>description</td>
+<td>string</td>
+<td>null</td>
+<td>the description of the post content</td>
+</tr>
+<tr>
+<td>media</td>
+<td>array</td>
+<td>[]</td>
+<td>an array of media data (each media resource cannot exceed 5MB)</td>
+</tr>
+</tbody></table>
+
+<h3 id="error-codes">Error codes</h3>
+
+<p>400 if error occurred in the middle of creating the profile</p>
+
+<h2 id="retrieve-a-post">Retrieve a post</h2>
+<pre class="highlight http"><code><span class="nf">GET</span> <span class="nn">/post/:post_id</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com</span>
+</code></pre>
+
+<blockquote>
+<p>JSON response if error occurred:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Error occurred!"</span><span class="w">
+  </span><span class="p">},</span><span class="w">  
+  </span><span class="nt">"post"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<blockquote>
+<p>JSON response if no error:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"post"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Photography"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"this is fucking beautiful"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-11-16 23:59:59"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"media"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NatGeo03"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"original"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://8weike-media.s3.amazonaws.com/1/4/0e9f75298af881b5c570d5c6ecbf3ad22da63fc0-NatGeo03.jpg"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NatGeo04"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"original"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://8weike-media.s3.amazonaws.com/1/4/ecb3fbb68e118cdf7a1f05c7424da03d2b76dd5f-NatGeo04.jpg"</span><span class="w">
+      </span><span class="p">}</span><span class="w">      
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p>Retrieve the content of a post and the media metadata that associates with this post</p>
+
+<p>No url parameter needed except the post id.</p>
+
+<h3 id="error-codes">Error codes</h3>
+
+<p>400 if error occurred in the middle of creating the profile</p>
+
 <h1 id="locale">Locale</h1>
 
 <h2 id="get-locale-code">Get locale code</h2>
-<pre class="highlight http"><code><span class="nf">GET</span> <span class="nn">/api/locale</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<pre class="highlight http"><code><span class="nf">GET</span> <span class="nn">/locale</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
 </code></pre>
 
@@ -594,7 +737,7 @@ The response is NOT complete! Will fill in more information as more features are
 <p>Get the current locale code if stored in the session. Otherwise the default locale code (<code class="prettyprint">zh-CN</code>) is returned.</p>
 
 <h2 id="set-locale-code">Set locale code</h2>
-<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/api/locale</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/locale</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">Accept</span><span class="p">:</span> <span class="s">application/json</span>
 <span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
 </code></pre>
@@ -626,7 +769,7 @@ The response is NOT complete! Will fill in more information as more features are
 <h1 id="utility">Utility</h1>
 
 <h2 id="get-captcha-image-web-only">Get Captcha image (Web only)</h2>
-<pre class="highlight http"><code><span class="nf">GET</span> <span class="nn">/api/captcha</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<pre class="highlight http"><code><span class="nf">POST</span> <span class="nn">/captcha</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
 </code></pre>
 
@@ -664,7 +807,7 @@ This endpoint is not suitable for mobile since string-based captcha is not mobil
 <p>400 if error occurred in the middle of retrieving captcha data</p>
 
 <h2 id="get-global-info">Get global info</h2>
-<pre class="highlight http"><code><span class="nf">GET</span> <span class="nn">/api/global_info</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<pre class="highlight http"><code><span class="nf">GET</span> <span class="nn">/global_info</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com    </span>
 </code></pre>
 
