@@ -688,8 +688,8 @@ be created!
     </span><span class="nt">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">,</span><span class="w">
     </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Error occurred!"</span><span class="w">
   </span><span class="p">},</span><span class="w">  
-  </span><span class="nt">"post"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"anchor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"abcde"</span><span class="w">
+  </span><span class="nt">"limit"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"post"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">  
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 
@@ -698,6 +698,7 @@ be created!
 </blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
   </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"limit"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
   </span><span class="nt">"posts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
       </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Photography"</span><span class="p">,</span><span class="w">
@@ -714,18 +715,15 @@ be created!
         </span><span class="p">}</span><span class="w">      
       </span><span class="p">]</span><span class="w">
     </span><span class="p">}</span><span class="w">
-  </span><span class="p">],</span><span class="w">
-  </span><span class="nt">"anchor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"abghr"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"limit"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
+  </span><span class="p">]</span><span class="w">  
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 
-<p>Retrieve a subset of posts for a given user. Note that an anchor needs to be provided
+<p>Retrieve a subset of posts for a given user. Note that a page number needs to be provided
 for pagination. If not provided then start from beginning. By default, the post will be
-ordered by created date.</p>
+ordered by created date. A <code class="prettyprint">sort</code> parameter could be specified to sort by other fields.</p>
 
-<p>Note that the response of this request will contain a new anchor that could be used to retrieve
-the next n posts in the next request. It will also return the limit of the previous request.</p>
+<p>Note that the response of this request will return the limit of the previous request.</p>
 
 <h3 id="url-parameters">Url Parameters</h3>
 
@@ -738,10 +736,10 @@ the next n posts in the next request. It will also return the limit of the previ
 </tr>
 </thead><tbody>
 <tr>
-<td>anchor</td>
-<td>string</td>
+<td>page</td>
+<td>integer</td>
 <td>null</td>
-<td>the starting post covered by this request</td>
+<td>the current page number</td>
 </tr>
 <tr>
 <td>limit</td>
@@ -749,12 +747,18 @@ the next n posts in the next request. It will also return the limit of the previ
 <td>10</td>
 <td>the number of posts for this request</td>
 </tr>
+<tr>
+<td>sort</td>
+<td>string</td>
+<td>null</td>
+<td>the field to be sorted by</td>
+</tr>
 </tbody></table>
 
 <h3 id="example-request">Example request</h3>
 
 <p><code class="prettyprint">
-GET /profiles/:profile_id/posts?anchor=abcde&amp;limit=10
+GET /profiles/1/posts?page=1&amp;limit=10
 </code></p>
 
 <h2 id="retrieve-a-post">Retrieve a post</h2>
