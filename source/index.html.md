@@ -43,7 +43,7 @@ Always use the API gateway above.
 ## Login using cellphone number
 
 ```http
-POST /api/login/phone HTTP/1.1
+POST /login/phone HTTP/1.1
 Accept: application/json
 Host: http://8weike.com    
 ```
@@ -89,7 +89,7 @@ password | string | null | User password
 ## Login using WeChat credential
 
 ```http
-POST /api/login/wechat HTTP/1.1
+POST /login/wechat HTTP/1.1
 Accept: application/json
 Host: http://8weike.com 
 ```
@@ -103,7 +103,7 @@ Not implemented yet
 ## Login using Weibo credential
 
 ```http
-POST /api/login/weibo HTTP/1.1
+POST /login/weibo HTTP/1.1
 Accept: application/json
 Host: http://8weike.com 
 ```
@@ -117,7 +117,7 @@ Not implemented yet
 ## Check login status
 
 ```http
-GET /api/login HTTP/1.1
+GET /login HTTP/1.1
 Host: http://8weike.com    
 ```
 
@@ -146,7 +146,7 @@ Check if the user has logged in and retrieve credential ID if so
 ## Signup (Web only)
 
 ```http
-POST /api/signup/phone/web HTTP/1.1
+POST /signup/phone/web HTTP/1.1
 Accept: application/json
 Host: http://8weike.com    
 ```
@@ -189,7 +189,7 @@ hash | string | null | The original bcrypted hash that corresponds to the actual
 ## Signup (Mobile only)
 
 ```http
-POST /api/signup/phone/mobile HTTP/1.1
+POST /signup/phone/mobile HTTP/1.1
 Accept: application/json
 Host: http://8weike.com    
 ```
@@ -228,7 +228,7 @@ password | string | null | User password
 ## Signup verify
 
 ```http
-POST /api/signup/verify HTTP/1.1
+POST /signup/verify HTTP/1.1
 Accept: application/json
 Host: http://8weike.com    
 ```
@@ -276,7 +276,7 @@ code | string | null | The user-input TFA code
 ## Create profile
 
 ```http
-POST /api/profile HTTP/1.1
+POST /profile HTTP/1.1
 Accept: application/json
 Host: http://8weike.com    
 ```
@@ -320,56 +320,10 @@ nickname | string | null | the nickname for the profile
 
 400 if error occurred in the middle of creating the profile
 
-## Retrieve minimal profile
+## Retrieve the profile of the currently logged in user
 
 ```http
-GET /api/profile/info HTTP/1.1
-Host: http://8weike.com    
-```
-
-> JSON response if error occurred:
-
-```json
-{
-  "error": {
-    "statusCode": 400,
-    "message": "Error occurred!"
-  },  
-  "profile": null
-}
-```
-
-> JSON response if no error:
-
-```json
-{
-  "error": null,
-  "profile": {
-    "nickname": "Cam",
-    "description": "CEO of Cameric",
-    "avatar": "FGHSDF8R82DFSFHDS"
-  }
-}
-```
-
-Retrieve the minimal representation of a profile
-
-<aside class="success">
-This endpoint requires that the user has logged in
-</aside>
-
-<aside class="warning">
-this endpoint is more suitable for web, since it's better to get the whole user in one call on mobile.
-</aside>
-
-### Error codes
-
-400 if error occurred in the middle of retrieving the profile
-
-## Retrieve full profile
-
-```http
-GET /api/profile/full HTTP/1.1
+GET /profile/me HTTP/1.1
 Host: http://8weike.com    
 ```
 
@@ -399,7 +353,7 @@ Host: http://8weike.com
 }
 ```
 
-Retrieve the full representation of a profile
+Retrieve the full representation of the profile of currently logged in user
 
 <aside class="success">
 This endpoint requires that the user has logged in
@@ -413,12 +367,164 @@ The response is NOT complete! Will fill in more information as more features are
 
 400 if error occurred in the middle of retrieving the profile
 
+## Retrieve the profile of a user
+
+```http
+GET /profile/:profile_id HTTP/1.1
+Host: http://8weike.com
+```
+
+> JSON response if error occurred:
+
+```json
+{
+  "error": {
+    "statusCode": 400,
+    "message": "Error occurred!"
+  },  
+  "profile": null
+}
+```
+
+> JSON response if no error:
+
+```json
+{
+  "error": null,
+  "profile": {
+    "nickname": "Tony",
+    "description": "Engineer of Cameric",
+    "avatar": "efhuwehu23ur32iu",
+    "[other fields]": "..."
+  }
+}
+```
+
+Retrieve the full representation of a profile of user passed in as the url param
+
+<aside class="warning">
+The response is NOT complete! Will fill in more information as more features are built
+</aside>
+
+### Error codes
+
+400 if error occurred in the middle of retrieving the profile
+
+
+# Post
+
+## Create a new post
+
+```http
+POST /post HTTP/1.1
+Host: http://8weike.com    
+Content-Type: multipart/form-data
+```
+
+> JSON response if error occurred:
+
+```json
+{
+  "error": {
+    "statusCode": 400,
+    "message": "Error occurred!"
+  },  
+  "id": null
+}
+```
+
+> JSON response if no error:
+
+```json
+{
+  "error": null,
+  "id": 3
+}
+```
+
+Create a new post with corresponding media resources. Note that each media resource cannot exceed 5MB
+and only up to 10 media files could be uploaded for each post.
+
+The Id of the new post will be returned as response in order to fetch the post data later.
+
+<aside class="success">
+This endpoint requires that the user has logged in
+</aside>
+
+<aside class="warning">
+The request MUST BE sent with the header `Content-Type: multipart/form-data`. Otherwise the post will not
+be created!
+</aside>
+
+### Query Parameters
+
+Parameter | Type | Default | Description
+--------- | ---- | ------- | -----------
+title | string | null | the title of the post (required!)
+description | string | null | the description of the post content
+media | array | [] | an array of media data (each media resource cannot exceed 5MB)
+
+### Error codes
+
+400 if error occurred in the middle of creating the profile
+
+## Retrieve a post
+
+```http
+GET /post/:post_id HTTP/1.1
+Host: http://8weike.com
+```
+
+> JSON response if error occurred:
+
+```json
+{
+  "error": {
+    "statusCode": 400,
+    "message": "Error occurred!"
+  },  
+  "post": null
+}
+```
+
+> JSON response if no error:
+
+```json
+{
+  "error": null,
+  "post": {
+    "title": "Photography",
+    "description": "this is fucking beautiful",
+    "created_at": "2016-11-16 23:59:59",
+    "media": [
+      {
+        "name": "NatGeo03",
+        "original": "https://8weike-media.s3.amazonaws.com/1/4/0e9f75298af881b5c570d5c6ecbf3ad22da63fc0-NatGeo03.jpg"
+      },
+      {
+        "name": "NatGeo04",
+        "original": "https://8weike-media.s3.amazonaws.com/1/4/ecb3fbb68e118cdf7a1f05c7424da03d2b76dd5f-NatGeo04.jpg"
+      }      
+    ]
+  }
+}
+```
+
+Retrieve the content of a post and the media metadata that associates with this post
+
+No url parameter needed except the post id.
+
+### Error codes
+
+400 if error occurred in the middle of creating the profile
+
+
 # Locale
 
 ## Get locale code
 
 ```http
-GET /api/locale HTTP/1.1
+GET /locale HTTP/1.1
 Host: http://8weike.com    
 ```
 
@@ -429,7 +535,7 @@ Get the current locale code if stored in the session. Otherwise the default loca
 ## Set locale code
 
 ```http
-POST /api/locale HTTP/1.1
+POST /locale HTTP/1.1
 Accept: application/json
 Host: http://8weike.com    
 ```
@@ -449,7 +555,7 @@ locale | string | null | the new locale code
 ## Get Captcha image (Web only)
 
 ```http
-POST /api/captcha HTTP/1.1
+POST /captcha HTTP/1.1
 Host: http://8weike.com    
 ```
 
@@ -489,7 +595,7 @@ This endpoint is not suitable for mobile since string-based captcha is not mobil
 ## Get global info
 
 ```http
-GET /api/global_info HTTP/1.1
+GET /global_info HTTP/1.1
 Host: http://8weike.com    
 ```
 
