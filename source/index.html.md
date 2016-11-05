@@ -535,7 +535,7 @@ limit | integer | 10 | the number of posts for this request
 GET /profiles/:profile_id/posts?anchor=abcde&limit=10
 `
 
-## Retrieve a post (not implemented yet)
+## Retrieve a post
 
 ```http
 GET /posts/:post_id HTTP/1.1
