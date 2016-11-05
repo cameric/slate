@@ -483,8 +483,8 @@ Host: http://8weike.com
     "statusCode": 400,
     "message": "Error occurred!"
   },  
-  "post": null,
-  "anchor": "abcde"
+  "limit": 0,
+  "post": null  
 }
 ```
 
@@ -493,6 +493,7 @@ Host: http://8weike.com
 ```json
 {
   "error": null,
+  "limit": 10,
   "posts": [
     {
       "title": "Photography",
@@ -509,30 +510,28 @@ Host: http://8weike.com
         }      
       ]
     }
-  ],
-  "anchor": "abghr",
-  "limit": 10
+  ]  
 }
 ```
 
-Retrieve a subset of posts for a given user. Note that an anchor needs to be provided
+Retrieve a subset of posts for a given user. Note that a page number needs to be provided
 for pagination. If not provided then start from beginning. By default, the post will be
-ordered by created date.
+ordered by created date. A `sort` parameter could be specified to sort by other fields.
 
-Note that the response of this request will contain a new anchor that could be used to retrieve
-the next n posts in the next request. It will also return the limit of the previous request.
+Note that the response of this request will return the limit of the previous request.
 
 ### Url Parameters
 
 Parameter | Type | Default | Description
 --------- | ---- | ------- | -----------
-anchor | string | null | the starting post covered by this request
+page | integer | null | the current page number
 limit | integer | 10 | the number of posts for this request
+sort | string | null | the field to be sorted by
 
 ### Example request
 
 `
-GET /profiles/:profile_id/posts?anchor=abcde&limit=10
+GET /profiles/1/posts?page=1&limit=10
 `
 
 ## Retrieve a post
