@@ -276,7 +276,7 @@ code | string | null | The user-input TFA code
 ## Create profile
 
 ```http
-POST /profile HTTP/1.1
+POST /profiles HTTP/1.1
 Accept: application/json
 Host: http://8weike.com    
 ```
@@ -416,7 +416,7 @@ The response is NOT complete! Will fill in more information as more features are
 ## Create a new post
 
 ```http
-POST /post HTTP/1.1
+POST /posts HTTP/1.1
 Host: http://8weike.com    
 Content-Type: multipart/form-data
 ```
