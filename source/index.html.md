@@ -323,7 +323,7 @@ nickname | string | null | the nickname for the profile
 ## Retrieve the profile of the currently logged in user
 
 ```http
-GET /profile/me HTTP/1.1
+GET /profiles/me HTTP/1.1
 Host: http://8weike.com    
 ```
 
@@ -370,7 +370,7 @@ The response is NOT complete! Will fill in more information as more features are
 ## Retrieve the profile of a user
 
 ```http
-GET /profile/:profile_id HTTP/1.1
+GET /profiles/:profile_id HTTP/1.1
 Host: http://8weike.com
 ```
 
@@ -468,10 +468,77 @@ media | array | [] | an array of media data (each media resource cannot exceed 5
 
 400 if error occurred in the middle of creating the profile
 
-## Retrieve a post
+## Retrieve posts for a given profile (not implemented yet)
 
 ```http
-GET /post/:post_id HTTP/1.1
+GET /profiles/:profile_id/posts HTTP/1.1
+Host: http://8weike.com
+```
+
+> JSON response if error:
+
+```json
+{
+  "error": {
+    "statusCode": 400,
+    "message": "Error occurred!"
+  },  
+  "post": null,
+  "anchor": "abcde"
+}
+```
+
+> JSON response if no error:
+
+```json
+{
+  "error": null,
+  "posts": [
+    {
+      "title": "Photography",
+      "description": "this is fucking beautiful",
+      "created_at": "2016-11-16 23:59:59",
+      "media": [
+        {
+          "name": "NatGeo03",
+          "original": "https://8weike-media.s3.amazonaws.com/1/4/0e9f75298af881b5c570d5c6ecbf3ad22da63fc0-NatGeo03.jpg"
+        },
+        {
+          "name": "NatGeo04",
+          "original": "https://8weike-media.s3.amazonaws.com/1/4/ecb3fbb68e118cdf7a1f05c7424da03d2b76dd5f-NatGeo04.jpg"
+        }      
+      ]
+    }
+  ],
+  "anchor": "abghr",
+  "limit": 10
+}
+```
+
+Retrieve a subset of posts for a given user. Note that an anchor needs to be provided
+for pagination. If not provided then start from beginning. By default, the post will be
+ordered by created date.
+
+Note that the response of this request will contain a new anchor that could be used to retrieve
+the next n posts in the next request. It will also return the limit of the previous request.
+
+### Url Parameters
+
+Parameter | Type | Default | Description
+--------- | ---- | ------- | -----------
+anchor | string | null | the starting post covered by this request
+limit | integer | 10 | the number of posts for this request
+
+### Example request
+
+`
+GET /profiles/:profile_id/posts?anchor=abcde&limit=10
+`
+
+## Retrieve a post (not implemented yet)
+
+```http
+GET /posts/:post_id HTTP/1.1
 Host: http://8weike.com
 ```
 
