@@ -637,7 +637,7 @@ This endpoint requires that the user has logged in
 </aside>
 
 <aside class="warning">
-The request MUST BE sent with the header `Content-Type: multipart/form-data`. Otherwise the post will not
+The request **MUST BE** sent with by standard file upload, which will include a header of `Content-Type: multipart/form-data`. Otherwise the post will not
 be created!
 </aside>
 
@@ -675,7 +675,7 @@ be created!
 
 <p>400 if error occurred in the middle of creating the profile</p>
 
-<h2 id="retrieve-posts-for-a-given-profile-not-implemented-yet">Retrieve posts for a given profile (not implemented yet)</h2>
+<h2 id="retrieve-posts-for-a-given-profile">Retrieve posts for a given profile</h2>
 <pre class="highlight http"><code><span class="nf">GET</span> <span class="nn">/profiles/:profile_id/posts</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">Host</span><span class="p">:</span> <span class="s">http://8weike.com</span>
 </code></pre>
@@ -687,9 +687,7 @@ be created!
   </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nt">"statusCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">,</span><span class="w">
     </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Error occurred!"</span><span class="w">
-  </span><span class="p">},</span><span class="w">  
-  </span><span class="nt">"limit"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"post"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">  
+  </span><span class="p">}</span><span class="w">  
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 
@@ -698,7 +696,7 @@ be created!
 </blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
   </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"limit"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"has_more"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
   </span><span class="nt">"posts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
       </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Photography"</span><span class="p">,</span><span class="w">
@@ -719,11 +717,12 @@ be created!
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 
-<p>Retrieve a subset of posts for a given user. Note that a page number needs to be provided
-for pagination. If not provided then start from beginning. By default, the post will be
+<p>Retrieve a subset of posts for a given user. Note that a page number and a limit need to be provided
+for pagination. If not provided, then start from beginning. By default, the post will be
 ordered by created date. A <code class="prettyprint">sort</code> parameter could be specified to sort by other fields.</p>
 
-<p>Note that the response of this request will return the limit of the previous request.</p>
+<p>Note that the response of this request will contain a boolean value <code class="prettyprint">has_more</code>, indicating whether 
+there are more posts that could be retrieved in the next page.</p>
 
 <h3 id="url-parameters">Url Parameters</h3>
 
