@@ -452,7 +452,7 @@ This endpoint requires that the user has logged in
 </aside>
 
 <aside class="warning">
-The request MUST BE sent with the header `Content-Type: multipart/form-data`. Otherwise the post will not
+The request **MUST BE** sent with by standard file upload, which will include a header of `Content-Type: multipart/form-data`. Otherwise the post will not
 be created!
 </aside>
 
@@ -468,7 +468,7 @@ media | array | [] | an array of media data (each media resource cannot exceed 5
 
 400 if error occurred in the middle of creating the profile
 
-## Retrieve posts for a given profile (not implemented yet)
+## Retrieve posts for a given profile
 
 ```http
 GET /profiles/:profile_id/posts HTTP/1.1
@@ -482,9 +482,7 @@ Host: http://8weike.com
   "error": {
     "statusCode": 400,
     "message": "Error occurred!"
-  },  
-  "limit": 0,
-  "post": null  
+  }  
 }
 ```
 
@@ -493,7 +491,7 @@ Host: http://8weike.com
 ```json
 {
   "error": null,
-  "limit": 10,
+  "has_more": true,
   "posts": [
     {
       "title": "Photography",
@@ -514,11 +512,12 @@ Host: http://8weike.com
 }
 ```
 
-Retrieve a subset of posts for a given user. Note that a page number needs to be provided
-for pagination. If not provided then start from beginning. By default, the post will be
+Retrieve a subset of posts for a given user. Note that a page number and a limit need to be provided
+for pagination. If not provided, then start from beginning. By default, the post will be
 ordered by created date. A `sort` parameter could be specified to sort by other fields.
 
-Note that the response of this request will return the limit of the previous request.
+Note that the response of this request will contain a boolean value `has_more`, indicating whether 
+there are more posts that could be retrieved in the next page.
 
 ### Url Parameters
 
