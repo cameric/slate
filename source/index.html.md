@@ -410,6 +410,39 @@ The response is NOT complete! Will fill in more information as more features are
 
 400 if error occurred in the middle of retrieving the profile
 
+# Media
+
+## Media object
+
+```json
+{
+  "name": "NatGeo03",
+  "original": "https://8weike-media.s3.amazonaws.com/1/4/0e9f75298af881b5c570d5c6ecbf3ad22da63fc0-NatGeo03.jpg",
+  "medium": null,
+  "thumbnail": "https://8weike-media.s3.amazonaws.com/1/4/0e9f75298af881b5c570d5c6ecbf3ad22da63fc0-NatGeo03.thumbnail.jpg"
+}
+```
+
+Currently media doesn't have any open endpoint yet, but here are some general information about how to process the
+media object correctly.
+
+A media object contains a name, which is the original name of the uploaded file without extension, and the CDN urls to
+three different versions of the image with various sizes (`ext` stands for the orignal extension, e.g. `jpg`):
+
+name | Extension | Description
+---- | --------- | -----------
+original | .ext | the original image size
+medium | .medium.ext | image resized to height of 400px and reduced quality to 90%
+thumbnail | .thumbnail.ext | image resized to height of 64px and reduced quality to 80%
+
+Note that there is possibility that either/both `medium` and `thumbnail` are null. There are two possible reasons for this scenario:
+
+- the original image size is smaller than or equal to the processed image size (in which case the original image could be used directly)
+- the image has not been finished processing yet
+
+Given that the current traffic is relatively low, the second scenario shouldn't happen often. However,
+there is one suggestion on the second scenario: the UI might need to have a "refresh" (scroll to refresh on mobile) feature
+so that this endpoint will be hit again with the updated URL and probably at that time the image has finished processing.
 
 # Post
 
@@ -500,11 +533,15 @@ Host: http://8weike.com
       "media": [
         {
           "name": "NatGeo03",
-          "original": "https://8weike-media.s3.amazonaws.com/1/4/0e9f75298af881b5c570d5c6ecbf3ad22da63fc0-NatGeo03.jpg"
+          "original": "https://8weike-media.s3.amazonaws.com/1/4/0e9f75298af881b5c570d5c6ecbf3ad22da63fc0-NatGeo03.jpg",
+          "medium": "https://8weike-media.s3.amazonaws.com/1/4/0e9f75298af881b5c570d5c6ecbf3ad22da63fc0-NatGeo03.medium.jpg",
+          "thumbnail": "https://8weike-media.s3.amazonaws.com/1/4/0e9f75298af881b5c570d5c6ecbf3ad22da63fc0-NatGeo03.thumbnail.jpg"
         },
         {
           "name": "NatGeo04",
-          "original": "https://8weike-media.s3.amazonaws.com/1/4/ecb3fbb68e118cdf7a1f05c7424da03d2b76dd5f-NatGeo04.jpg"
+          "original": "https://8weike-media.s3.amazonaws.com/1/4/ecb3fbb68e118cdf7a1f05c7424da03d2b76dd5f-NatGeo04.jpg",
+          "medium": null,
+          "thumbnail": "https://8weike-media.s3.amazonaws.com/1/4/ecb3fbb68e118cdf7a1f05c7424da03d2b76dd5f-NatGeo04.thumbnail.jpg"
         }      
       ]
     }
@@ -564,11 +601,15 @@ Host: http://8weike.com
     "media": [
       {
         "name": "NatGeo03",
-        "original": "https://8weike-media.s3.amazonaws.com/1/4/0e9f75298af881b5c570d5c6ecbf3ad22da63fc0-NatGeo03.jpg"
+        "original": "https://8weike-media.s3.amazonaws.com/1/4/0e9f75298af881b5c570d5c6ecbf3ad22da63fc0-NatGeo03.jpg",
+        "medium": "https://8weike-media.s3.amazonaws.com/1/4/0e9f75298af881b5c570d5c6ecbf3ad22da63fc0-NatGeo03.medium.jpg",
+        "thumbnail": "https://8weike-media.s3.amazonaws.com/1/4/0e9f75298af881b5c570d5c6ecbf3ad22da63fc0-NatGeo03.thumbnail.jpg"
       },
       {
         "name": "NatGeo04",
-        "original": "https://8weike-media.s3.amazonaws.com/1/4/ecb3fbb68e118cdf7a1f05c7424da03d2b76dd5f-NatGeo04.jpg"
+        "original": "https://8weike-media.s3.amazonaws.com/1/4/ecb3fbb68e118cdf7a1f05c7424da03d2b76dd5f-NatGeo04.jpg",
+        "medium": null,
+        "thumbnail": "https://8weike-media.s3.amazonaws.com/1/4/ecb3fbb68e118cdf7a1f05c7424da03d2b76dd5f-NatGeo04.thumbnail.jpg"
       }      
     ]
   }
